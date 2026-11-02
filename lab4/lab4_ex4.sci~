@@ -1,0 +1,32 @@
+disp("--- EXERCISE 4: AUDIO PROCESSING ---");
+
+Fs = 16000; 
+t = 0 : 1/Fs : 1-(1/Fs); 
+f0 = 440; 
+y = 0.5 * sin(2 * %pi * f0 * t) + 0.2 * sin(2 * %pi * 2 * f0 * t);
+
+
+N = length(y);
+Y_fft = abs(fft(y));
+Y_fft = Y_fft(1:N/2) / N;
+f_axis = Fs * (0:(N/2)-1) / N;
+
+scf(4); clf;
+
+subplot(2,1,1);
+samples_to_plot = 150; 
+plot(t(1:samples_to_plot), y(1:samples_to_plot), 'b', 'LineWidth', 2);
+title("Time Domain: Audio Waveform (Zoomed In)", "fontsize", 4);
+xlabel("Time (seconds)", "fontsize", 3);
+ylabel("Amplitude", "fontsize", 3);
+xgrid();
+
+subplot(2,1,2);
+plot(f_axis, Y_fft, 'r', 'LineWidth', 2);
+title("Frequency Domain: Audio Spectrum", "fontsize", 4);
+xlabel("Frequency (Hz)", "fontsize", 3);
+ylabel("Magnitude", "fontsize", 3);
+
+a = gca();
+a.data_bounds = [0, 0; 1500, max(Y_fft)*1.2]; 
+xgrid();
